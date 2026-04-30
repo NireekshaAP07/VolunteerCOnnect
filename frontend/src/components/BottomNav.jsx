@@ -13,9 +13,9 @@ const BottomNav = () => {
         <Calendar size={24} />
         <span>Events</span>
       </NavLink>
-      <NavLink to="/rewards" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
+      <NavLink to="/leaderboard" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
         <Trophy size={24} />
-        <span>Points</span>
+        <span>Leaders</span>
       </NavLink>
       <NavLink to="/profile" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
         <User size={24} />

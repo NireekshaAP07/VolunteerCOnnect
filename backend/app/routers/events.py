@@ -19,6 +19,7 @@ class EventBase(BaseModel):
     perks: str = None
     food_provided: bool = False
     contact_details: str
+    custom_appreciation: str = None
     ngo_id: str
 
 class EventCreate(EventBase):
@@ -59,3 +60,36 @@ def get_event(event_id: int, db: Session = Depends(database.get_db)):
     if not event:
         raise HTTPException(status_code=404, detail="Event not found")
     return event
+
+@router.put("/{event_id}", response_model=EventResponse)
+async def update_event(event_id: int, event: EventCreate, db: Session = Depends(database.get_db)):
+    db_event = db.query(models.Event).filter(models.Event.id == event_id).first()
+    if not db_event:
+        raise HTTPException(status_code=404, detail="Event not found")
+        
+    if db_event.title != event.title or db_event.description != event.description:
+        try:
+            improved_desc = await services.gemini.improve_description(event.title, event.description)
+            category = await services.gemini.categorize_event(improved_desc)
+            db_event.description = improved_desc
+            db_event.category = category
+        except Exception:
+            db_event.description = event.description
+    else:
+        db_event.description = event.description
+
+    db_event.title = event.title
+    db_event.location_name = event.location_name
+    db_event.latitude = event.latitude
+    db_event.longitude = event.longitude
+    db_event.date_time = event.date_time
+    db_event.volunteers_required = event.volunteers_required
+    db_event.skills_required = event.skills_required
+    db_event.perks = event.perks
+    db_event.food_provided = event.food_provided
+    db_event.contact_details = event.contact_details
+    db_event.custom_appreciation = event.custom_appreciation
+    
+    db.commit()
+    db.refresh(db_event)
+    return db_event

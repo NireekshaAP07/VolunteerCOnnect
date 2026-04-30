@@ -34,6 +34,7 @@ class Event(Base):
     perks = Column(String, nullable=True)
     food_provided = Column(Boolean, default=False)
     contact_details = Column(String)
+    custom_appreciation = Column(String, nullable=True)
     ngo_id = Column(String, ForeignKey("users.id"))
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
 

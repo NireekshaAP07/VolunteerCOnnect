@@ -14,6 +14,7 @@ const CreateEvent = () => {
   const [formData, setFormData] = useState({
     title: '', description: '', location: '', date: '', time: '',
     volunteersNeeded: '', skills: '', perks: '', food: false,
+    customAppreciation: ''
   });
 
   const set = (key, val) => setFormData(prev => ({ ...prev, [key]: val }));
@@ -34,7 +35,7 @@ const CreateEvent = () => {
         food_provided: formData.food,
         contact_details: profile?.email || user.email,
         ngo_id: user.uid,
-        ngo_name: profile?.name || 'NGO',
+        custom_appreciation: formData.customAppreciation || null
       });
       setSuccess(true);
       setTimeout(() => navigate('/dashboard'), 1500);
@@ -158,6 +159,12 @@ const CreateEvent = () => {
               <span className="text-sm font-semibold">Food Provided?</span>
               <input type="checkbox" className="w-6 h-6 accent-emerald-500" checked={formData.food}
                 onChange={e => set('food', e.target.checked)} />
+            </div>
+            <div>
+              <label className="text-xs font-bold text-text-secondary mb-1 block">CUSTOM CERTIFICATE MESSAGE (OPTIONAL)</label>
+              <textarea className="w-full p-3 rounded-xl border border-border-color bg-primary focus:border-emerald-500 outline-none min-h-[80px]"
+                placeholder="e.g. For your incredible help managing the crowd during the marathon." value={formData.customAppreciation}
+                onChange={e => set('customAppreciation', e.target.value)} />
             </div>
           </div>
         </div>

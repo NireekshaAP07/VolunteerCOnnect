@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Plus, Users, Calendar, CheckCircle, TrendingUp, AlertCircle } from 'lucide-react';
+import { Plus, Users, Calendar, CheckCircle, TrendingUp, AlertCircle, Edit } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
@@ -115,8 +115,13 @@ const NGODashboard = () => {
                     {' • '}{event.volunteers_joined}/{event.volunteers_required} volunteers
                   </p>
                 </div>
-                <div className={`px-3 py-1 rounded-full text-[10px] font-bold ${upcoming ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-600'}`}>
-                  {upcoming ? 'Upcoming' : 'Completed'}
+                <div className="flex items-center gap-2">
+                  <div className={`px-3 py-1 rounded-full text-[10px] font-bold ${upcoming ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900 dark:text-emerald-300' : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400'}`}>
+                    {upcoming ? 'Upcoming' : 'Completed'}
+                  </div>
+                  <button onClick={() => navigate(`/edit-event/${event.id}`)} className="text-blue-500 hover:text-blue-600 p-2 rounded-full hover:bg-blue-50 dark:hover:bg-blue-900/30 transition-colors" title="Edit Event">
+                    <Edit size={16} />
+                  </button>
                 </div>
               </div>
             );
