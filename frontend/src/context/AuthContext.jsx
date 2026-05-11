@@ -65,7 +65,7 @@ export const AuthProvider = ({ children }) => {
   const points = profile?.points || 0;
 
   return (
-    <AuthContext.Provider value={{ user, profile, role, points, loading, login, signup, logout, refreshProfile }}>
+    <AuthContext.Provider value={{ user, currentUser: user, profile, role, points, loading, login, signup, logout, refreshProfile }}>
       {!loading && children}
     </AuthContext.Provider>
   );

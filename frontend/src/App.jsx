@@ -18,6 +18,7 @@ import Profile from './pages/Profile';
 import Leaderboard from './pages/Leaderboard';
 import PublicPortfolio from './pages/PublicPortfolio';
 import FloatingChat from './components/FloatingChat';
+// import PeerMatchBackground from './components/PeerMatchBackground';
 import './App.css';
 
 function App() {
@@ -27,6 +28,7 @@ function App() {
         <ToastProvider>
           <Router>
             <div className="app-container flex flex-col min-h-screen bg-[var(--bg-primary)]">
+              {/* <PeerMatchBackground /> */}
               <Navbar />
               <main className="flex-1 w-full max-w-[100vw] overflow-x-hidden">
                 <Routes>

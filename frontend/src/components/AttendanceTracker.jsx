@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useToast } from './ToastNotifications';
 import { CheckCircle2, Clock, LogOut } from 'lucide-react';
+import api from '../services/api';
 
 export default function AttendanceTracker({ eventId, userId, checkedInAt, checkedOutAt, onUpdate }) {
   const [loading, setLoading] = useState(false);
@@ -9,21 +10,11 @@ export default function AttendanceTracker({ eventId, userId, checkedInAt, checke
   const handleAction = async (action) => {
     setLoading(true);
     try {
-      const response = await fetch(`http://localhost:8000/attendance/${action}?user_id=${userId}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ event_id: eventId })
-      });
-      
-      if (response.ok) {
-        addToast(`Successfully ${action === 'checkin' ? 'checked in' : 'checked out'}!`, 'success');
-        if (onUpdate) onUpdate();
-      } else {
-        const data = await response.json();
-        addToast(data.detail || "Failed to update attendance", 'error');
-      }
+      await api.post(`/api/attendance/${action}?user_id=${userId}`, { event_id: eventId });
+      addToast(`Successfully ${action === 'checkin' ? 'checked in' : 'checked out'}!`, 'success');
+      if (onUpdate) onUpdate();
     } catch (err) {
-      addToast("Network error. Please try again.", 'error');
+      addToast(err.response?.data?.detail || err.response?.data?.error || "Network error. Please try again.", 'error');
     } finally {
       setLoading(false);
     }

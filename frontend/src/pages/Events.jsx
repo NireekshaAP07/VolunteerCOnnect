@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import EventCard from '../components/EventCard';
 import LoadingSpinner from '../components/LoadingSpinner';
+import api from '../services/api';
 
 export default function Events() {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('http://localhost:8000/events/')
-      .then(res => res.json())
-      .then(data => {
+    api.get('/api/events')
+      .then(({ data }) => {
         setEvents(data);
         setLoading(false);
       })

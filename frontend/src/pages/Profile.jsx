@@ -5,6 +5,7 @@ import LoadingSpinner from '../components/LoadingSpinner';
 import CertificateGenerator from '../components/CertificateGenerator';
 import { Mail, User, Clock, CheckCircle, Share2, ExternalLink } from 'lucide-react';
 import { toast } from 'react-hot-toast';
+import api from '../services/api';
 
 export default function Profile() {
   const { currentUser, role } = useAuth();
@@ -15,12 +16,12 @@ export default function Profile() {
   useEffect(() => {
     if (currentUser?.uid) {
       Promise.all([
-        fetch(`http://localhost:8000/auth/user/${currentUser.uid}`).then(res => res.json()),
-        fetch(`http://localhost:8000/attendance/user/${currentUser.uid}`).then(res => res.json())
+        api.get(`/api/users/${currentUser.uid}`),
+        api.get(`/api/attendance?user_id=${currentUser.uid}`)
       ])
-        .then(([user, attendanceData]) => {
-          setUserData(user);
-          setHistory(Array.isArray(attendanceData) ? attendanceData : []);
+        .then(([userRes, attendanceRes]) => {
+          setUserData(userRes.data);
+          setHistory(Array.isArray(attendanceRes.data) ? attendanceRes.data : []);
           setLoading(false);
         })
         .catch(err => {
@@ -78,10 +79,10 @@ export default function Profile() {
                   <div key={record.id} className="p-4 border border-[var(--border-color)] rounded-xl bg-slate-50 dark:bg-slate-800/50">
                     <div className="flex justify-between items-start mb-2">
                       <div>
-                        <h4 className="font-bold text-[var(--text-primary)]">{record.event_details?.title || 'Unknown Event'}</h4>
-                        <p className="text-sm text-[var(--text-secondary)]">{record.event_details?.ngo_name || 'Unknown NGO'}</p>
+                        <h4 className="font-bold text-[var(--text-primary)]">{record.event_details?.title || `Event #${record.event_id}`}</h4>
+                        <p className="text-sm text-[var(--text-secondary)]">{record.event_details?.ngo_name || 'VolunteerConnect'}</p>
                       </div>
-                      {record.check_out && (
+                      {(record.check_out || record.verified_at) && (
                         <span className="flex items-center gap-1 text-xs font-semibold text-emerald-600 bg-emerald-100 dark:bg-emerald-900/50 dark:text-emerald-400 px-2 py-1 rounded-full">
                           <CheckCircle className="w-3 h-3" /> Completed
                         </span>
@@ -95,15 +96,15 @@ export default function Profile() {
                           <span>In: {new Date(record.check_in).toLocaleString()}</span>
                         </div>
                       )}
-                      {record.check_out && (
+                      {(record.check_out || record.verified_at) && (
                         <div className="flex items-center gap-1">
                           <Clock className="w-3 h-3" />
-                          <span>Out: {new Date(record.check_out).toLocaleString()}</span>
+                          <span>Out: {new Date(record.check_out || record.verified_at).toLocaleString()}</span>
                         </div>
                       )}
                     </div>
                     
-                    {record.check_out && (
+                    {(record.check_out || record.verified_at) && (
                       <CertificateGenerator 
                         attendance={record} 
                         volunteerName={userData?.name || "Volunteer"} 

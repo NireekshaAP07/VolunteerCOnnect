@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Sparkles, Loader2 } from 'lucide-react';
+import api from '../services/api';
 
 export default function GeminiEnhance({ text, onEnhanced }) {
   const [loading, setLoading] = useState(false);
@@ -13,19 +14,10 @@ export default function GeminiEnhance({ text, onEnhanced }) {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch('http://localhost:8000/ai/enhance', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text })
-      });
-      const data = await response.json();
-      if (response.ok) {
-        onEnhanced(data.improved_text);
-      } else {
-        setError(data.detail || "Enhancement failed");
-      }
+      const { data } = await api.post('/api/ai/enhance', { text });
+      onEnhanced(data.improved_text);
     } catch (err) {
-      setError("Could not connect to AI service.");
+      setError(err.response?.data?.detail || "Could not connect to AI service.");
     } finally {
       setLoading(false);
     }
