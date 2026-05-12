@@ -58,14 +58,14 @@ const VolunteerDashboard = () => {
   }, [search, events]);
 
   return (
-    <div className="animate-fade-in pb-20">
+    <div className="animate-fade-in pb-20 container mx-auto">
       <header className="mb-8">
         <h2 className="text-2xl font-bold">Hello, Volunteer! 👋</h2>
         <p className="text-text-secondary">Explore events and make an impact.</p>
       </header>
 
       {/* Points Card */}
-      <div className={`card mb-8 ${level.color} text-white border-none relative overflow-hidden`}>
+      <div className={`card mb-8 ${level.color} text-white border-none relative overflow-hidden max-w-4xl`}>
         <div className="relative z-10">
           <div className="flex justify-between items-center mb-4">
             <div>
@@ -90,7 +90,7 @@ const VolunteerDashboard = () => {
       </div>
 
       {/* Search */}
-      <div className="flex gap-2 mb-6">
+      <div className="flex gap-2 mb-6 max-w-4xl">
         <div className="flex-1 relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary" size={18} />
           <input
@@ -113,21 +113,21 @@ const VolunteerDashboard = () => {
       </div>
 
       {error && (
-        <div className="flex items-center gap-2 bg-red-50 text-red-600 p-3 rounded-xl mb-4 text-sm">
+        <div className="flex items-center gap-2 bg-red-50 text-red-600 p-3 rounded-xl mb-4 text-sm max-w-4xl">
           <AlertCircle size={16} /> {error}
         </div>
       )}
 
       {loading ? (
-        <div className="flex flex-col gap-4">
+        <div className="grid-cols-responsive">
           {[1, 2, 3].map(i => (
             <div key={i} className="card p-0 h-48 animate-pulse bg-secondary" />
           ))}
         </div>
       ) : (
-        <div className="flex flex-col gap-4">
+        <div className="grid-cols-responsive">
           {filtered.length === 0 && !error && (
-            <p className="text-center text-text-secondary py-12">No events found.</p>
+            <p className="text-center text-text-secondary py-12 col-span-full">No events found.</p>
           )}
           {filtered.map(event => (
             <motion.div

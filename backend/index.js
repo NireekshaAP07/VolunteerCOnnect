@@ -261,6 +261,7 @@ app.post('/api/registrations', async (req, res) => {
 
     res.status(201).json(reg);
   } catch (error) {
+    console.error('Error in registration:', error);
     res.status(500).json({ error: 'Failed to register' });
   }
 });
@@ -343,12 +344,14 @@ app.post('/api/attendance/checkout', async (req, res) => {
     });
 
     const userDoc = usersColl.doc(user_id);
-    await userDoc.update({
-      points: admin.firestore.FieldValue.increment(10)
-    });
+    await userDoc.set({
+      points: admin.firestore.FieldValue.increment(10),
+      updated_at: new Date().toISOString()
+    }, { merge: true });
 
     res.json({ success: true });
   } catch (error) {
+    console.error('Checkout failed:', error);
     res.status(500).json({ error: 'Failed to check out' });
   }
 });
@@ -357,6 +360,9 @@ app.post('/api/attendance/checkout', async (req, res) => {
 app.post('/api/attendance/verify', async (req, res) => {
   try {
     const { user_id, event_id } = req.body;
+    if (!user_id || !event_id) {
+      return res.status(400).json({ error: 'user_id and event_id are required' });
+    }
 
     const eventDoc = await eventsColl.doc(event_id).get();
     if (!eventDoc.exists) return res.status(404).json({ error: 'Event not found' });
@@ -368,18 +374,19 @@ app.post('/api/attendance/verify', async (req, res) => {
       .get();
 
     const existingRecord = existing.empty ? null : existing.docs[0];
-    if (existingRecord?.data().verified_at) return res.status(409).json({ error: 'Already verified' });
+    if (existingRecord?.data()?.verified_at) return res.status(409).json({ error: 'Already verified' });
 
     const userDoc = usersColl.doc(user_id);
-    await userDoc.update({
-      points: admin.firestore.FieldValue.increment(event.points)
-    });
+    await userDoc.set({
+      points: admin.firestore.FieldValue.increment(event.points),
+      updated_at: new Date().toISOString()
+    }, { merge: true });
 
     const verifiedRecord = {
       user_id,
       event_id,
-      check_in: existingRecord?.data().check_in || new Date().toISOString(),
-      check_out: existingRecord?.data().check_out || new Date().toISOString(),
+      check_in: existingRecord?.data()?.check_in || new Date().toISOString(),
+      check_out: existingRecord?.data()?.check_out || new Date().toISOString(),
       verified_at: new Date().toISOString(),
       verified_by_ngo: true,
       points_awarded: event.points,
@@ -394,7 +401,8 @@ app.post('/api/attendance/verify', async (req, res) => {
 
     res.json({ success: true, points_awarded: event.points });
   } catch (error) {
-    res.status(500).json({ error: 'Failed to verify attendance' });
+    console.error('Verification failed:', error);
+    res.status(500).json({ error: `Failed to verify: ${error.message}` });
   }
 });
 

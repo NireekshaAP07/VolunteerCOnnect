@@ -55,7 +55,7 @@ const NGODashboard = () => {
   };
 
   return (
-    <div className="animate-fade-in pb-20">
+    <div className="animate-fade-in pb-20 container mx-auto">
       <header className="flex justify-between items-center mb-8">
         <div>
           <h2 className="text-2xl font-bold">NGO Dashboard 🏢</h2>
@@ -68,13 +68,13 @@ const NGODashboard = () => {
       </header>
 
       {error && (
-        <div className="flex items-center gap-2 bg-red-50 text-red-600 p-3 rounded-xl mb-6 text-sm">
+        <div className="flex items-center gap-2 bg-red-50 text-red-600 p-3 rounded-xl mb-6 text-sm max-w-4xl">
           <AlertCircle size={16} /> {error}
         </div>
       )}
 
       {/* Stats */}
-      <div className="grid grid-cols-2 gap-4 mb-8">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
         {stats.map((stat, idx) => (
           <motion.div key={idx} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
             transition={{ delay: idx * 0.08 }} className="card p-4 flex flex-col gap-2">
@@ -94,16 +94,18 @@ const NGODashboard = () => {
       </div>
 
       {loading ? (
-        [1, 2].map(i => <div key={i} className="card h-20 animate-pulse bg-secondary mb-4" />)
+        <div className="grid-cols-responsive">
+          {[1, 2].map(i => <div key={i} className="card h-20 animate-pulse bg-secondary mb-4" />)}
+        </div>
       ) : events.length === 0 ? (
-        <div className="card text-center py-12">
+        <div className="card text-center py-12 max-w-4xl mx-auto">
           <p className="text-text-secondary mb-4">No events yet.</p>
           <button onClick={() => navigate('/create-event')} className="btn btn-primary px-6 py-3">
             Create Your First Event
           </button>
         </div>
       ) : (
-        <div className="flex flex-col gap-4">
+        <div className="grid-cols-responsive">
           {events.map(event => {
             const upcoming = new Date(event.date_time) > new Date();
             return (
@@ -133,7 +135,7 @@ const NGODashboard = () => {
       {registrations.length > 0 && (
         <div className="mt-8">
           <h3 className="font-bold mb-4">Recent Registrations</h3>
-          <div className="card">
+          <div className="card max-w-4xl">
             <div className="flex flex-col gap-4">
               {registrations.slice(0, 5).map((reg, i) => (
                 <div key={reg.id} className="flex items-center gap-3 border-b border-border-color last:border-0 pb-3 last:pb-0">

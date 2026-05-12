@@ -9,7 +9,7 @@ const Home = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen flex flex-col p-6 max-w-lg mx-auto">
+    <div className="min-h-screen flex flex-col p-6 container mx-auto">
       <header className="flex justify-between items-center mb-12">
         <div className="flex items-center gap-2">
           <div className="bg-emerald-500 p-2 rounded-xl text-white">
@@ -25,31 +25,32 @@ const Home = () => {
         </button>
       </header>
 
-      <main className="flex-1">
+      <main className="flex-1 flex flex-col lg:flex-row lg:items-center lg:gap-16">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
+          className="flex-1"
         >
-          <h2 className="text-4xl font-bold mb-4 leading-tight">
+          <h2 className="text-4xl lg:text-6xl font-bold mb-6 leading-tight">
             Connect. <br/>
             <span className="text-emerald-500">Contribute.</span> <br/>
             Change.
           </h2>
-          <p className="text-text-secondary mb-8 text-lg">
+          <p className="text-text-secondary mb-10 text-lg lg:text-xl max-w-xl">
             A smart resource allocation platform for NGOs and volunteers to build a better world together.
           </p>
 
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col sm:flex-row gap-4 max-w-md">
             <button 
               onClick={() => navigate('/signup')}
-              className="btn btn-primary w-full py-4 text-lg"
+              className="btn btn-primary flex-1 py-4 text-lg"
             >
               Get Started <ArrowRight size={20} />
             </button>
             <button 
               onClick={() => navigate('/login')}
-              className="btn bg-white border border-border-color text-text-primary w-full py-4 text-lg"
+              className="btn bg-white border border-border-color text-text-primary flex-1 py-4 text-lg"
               style={{ backgroundColor: 'var(--bg-secondary)' }}
             >
               Login
@@ -57,21 +58,32 @@ const Home = () => {
           </div>
         </motion.div>
 
-        <div className="grid grid-cols-2 gap-4 mt-12">
-          <div className="card flex flex-col items-center text-center p-4">
-            <Shield className="text-blue-500 mb-2" size={32} />
-            <h3 className="font-bold text-sm">NGO Admin</h3>
-            <p className="text-xs text-text-secondary">Post and manage events</p>
-          </div>
-          <div className="card flex flex-col items-center text-center p-4">
-            <Users className="text-emerald-500 mb-2" size={32} />
-            <h3 className="font-bold text-sm">Volunteer</h3>
-            <p className="text-xs text-text-secondary">Earn points & help others</p>
-          </div>
+        <div className="grid grid-cols-2 gap-6 mt-12 lg:mt-0 flex-1">
+          <motion.div 
+            whileHover={{ y: -5 }}
+            className="card flex flex-col items-center text-center p-8 bg-blue-50/30 border-blue-100"
+          >
+            <div className="p-4 bg-blue-500 rounded-2xl text-white mb-4">
+              <Shield size={40} />
+            </div>
+            <h3 className="font-bold text-lg mb-2">NGO Admin</h3>
+            <p className="text-sm text-text-secondary">Post events & manage community impact</p>
+          </motion.div>
+          
+          <motion.div 
+            whileHover={{ y: -5 }}
+            className="card flex flex-col items-center text-center p-8 bg-emerald-50/30 border-emerald-100"
+          >
+            <div className="p-4 bg-emerald-500 rounded-2xl text-white mb-4">
+              <Users size={40} />
+            </div>
+            <h3 className="font-bold text-lg mb-2">Volunteer</h3>
+            <p className="text-sm text-text-secondary">Join causes, earn points & build your profile</p>
+          </motion.div>
         </div>
       </main>
 
-      <footer className="mt-12 text-center text-text-secondary text-sm">
+      <footer className="mt-16 py-8 border-t border-border-color text-center text-text-secondary text-sm">
         &copy; 2026 VOlunteerConect. Empowering Communities.
       </footer>
     </div>

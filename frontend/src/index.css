@@ -110,6 +110,47 @@ h1, h2, h3, h4, h5, h6 {
   box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
 }
 
+/* Responsive Container */
+.container {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+}
+
+@media (min-width: 640px) {
+  .container { max-width: 640px; }
+}
+@media (min-width: 768px) {
+  .container { max-width: 768px; }
+}
+@media (min-width: 1024px) {
+  .container { max-width: 1024px; }
+}
+@media (min-width: 1280px) {
+  .container { max-width: 1200px; }
+}
+
+/* Responsive Grid System */
+.grid-cols-responsive {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .grid-cols-responsive {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .grid-cols-responsive {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
 .mobile-nav {
   position: fixed;
   bottom: 0;
@@ -124,6 +165,26 @@ h1, h2, h3, h4, h5, h6 {
   align-items: center;
   z-index: 1000;
   padding: 0 10px;
+}
+
+/* Desktop Nav Adjustments */
+@media (min-width: 1024px) {
+  .mobile-nav {
+    width: 300px;
+    height: 100vh;
+    left: 0;
+    bottom: 0;
+    top: 0;
+    flex-direction: column;
+    justify-content: center;
+    gap: 2rem;
+    border-top: none;
+    border-right: 1px solid var(--border-color);
+  }
+  
+  body {
+    padding-left: 300px;
+  }
 }
 
 .nav-item {
@@ -153,6 +214,18 @@ h1, h2, h3, h4, h5, h6 {
 /* Utility Classes */
 .min-h-screen { min-height: 100vh; }
 .flex { display: flex; }
+.hidden { display: none !important; }
+
+/* Robust Responsive Utilities */
+@media (max-width: 639px) {
+  .hide-on-mobile { display: none !important; }
+}
+
+@media (min-width: 640px) {
+  .hide-on-desktop { display: none !important; }
+  .show-on-desktop { display: flex !important; }
+}
+
 .flex-col { flex-direction: column; }
 .items-center { align-items: center; }
 .justify-between { justify-content: space-between; }
@@ -170,6 +243,8 @@ h1, h2, h3, h4, h5, h6 {
 .p-6 { padding: 24px; }
 .w-full { width: 100%; }
 .max-w-lg { max-width: 512px; }
+.max-w-4xl { max-width: 896px; }
+.max-w-7xl { max-width: 1280px; }
 .mx-auto { margin-left: auto; margin-right: auto; }
 .text-center { text-align: center; }
 .text-2xl { font-size: 1.5rem; }

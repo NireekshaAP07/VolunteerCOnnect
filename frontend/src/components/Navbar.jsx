@@ -22,14 +22,14 @@ export default function Navbar() {
         VolunteerConnect
       </Link>
       
-      <div className="flex items-center gap-4 hidden sm:flex">
+      <div className="hide-on-mobile show-on-desktop items-center gap-4">
         <ThemeToggle />
         {currentUser ? (
           <>
             <Link to="/events" className="text-sm font-semibold hover:text-emerald-500 text-[var(--text-primary)]">Events</Link>
             <Link to="/dashboard" className="text-sm font-semibold hover:text-emerald-500 text-[var(--text-primary)]">Dashboard</Link>
             <Link to="/profile" className="text-sm font-semibold hover:text-emerald-500 text-[var(--text-primary)]">Profile</Link>
-            <button onClick={handleLogout} className="text-sm text-red-500 font-semibold hover:text-red-600">
+            <button onClick={handleLogout} className="text-sm text-red-500 font-semibold hover:text-red-600 ml-2">
               Logout
             </button>
           </>
@@ -41,8 +41,8 @@ export default function Navbar() {
         )}
       </div>
       
-      {/* Mobile only theme toggle, the rest handled by BottomNav */}
-      <div className="sm:hidden">
+      {/* Mobile only theme toggle */}
+      <div className="hide-on-desktop flex items-center">
         <ThemeToggle />
       </div>
     </nav>
